@@ -239,4 +239,8 @@ interface SwipeableListItemProps {
     optOutMouseEvents?: boolean;
 }
 
-export class SwipeableListItem extends PureComponent<SwipeableListItemProps> {}
+export class SwipeableListItem extends PureComponent<SwipeableListItemProps> {
+  openLeading(): void;
+  openTrailing(): void;
+  close(): void;
+}

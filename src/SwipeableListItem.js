@@ -439,6 +439,72 @@ class SwipeableListItem extends PureComponent {
     }
   };
 
+  openLeading = () => {
+    if (!this.leadingActionsElement) {
+      return;
+    }
+
+    if (this.trailingActionsOpened) {
+      this.left = -this.trailingActionsWidth;
+      this.playReturnAnimation({ to: 0 });
+    }
+
+    this.left = this.leadingActionsWidth;
+    this.leadingActionsOpened = true;
+    this.trailingActionsOpened = false;
+
+    this.setState(initialState);
+
+    if (this.listElement) {
+      this.listElement.className =
+        'swipeable-list-item__content swipeable-list-item__content--return';
+      this.listElement.style.transform = `translateX(${this.leadingActionsWidth}px)`;
+    }
+
+    if (this.leadingActionsElement) {
+      this.leadingActionsElement.className =
+        'swipeable-list-item__leading-actions swipeable-list-item__leading-actions--return test-actions-opened';
+      this.leadingActionsElement.style.width = `${this.leadingActionsWidth}px`;
+    }
+  };
+
+  openTrailing = () => {
+    if (!this.trailingActionsElement) {
+      return;
+    }
+
+    if (this.leadingActionsOpened) {
+      this.left = this.leadingActionsWidth;
+      this.playReturnAnimation({ to: 0 });
+    }
+
+    this.left = -this.trailingActionsWidth;
+    this.leadingActionsOpened = false;
+    this.trailingActionsOpened = true;
+
+    this.setState(initialState);
+
+    if (this.listElement) {
+      this.listElement.className =
+        'swipeable-list-item__content swipeable-list-item__content--return';
+      this.listElement.style.transform = `translateX(${-this.trailingActionsWidth}px)`;
+    }
+
+    if (this.trailingActionsElement) {
+      this.trailingActionsElement.className =
+        'swipeable-list-item__trailing-actions swipeable-list-item__trailing-actions--return test-actions-opened';
+      this.trailingActionsElement.style.width = `${this.trailingActionsWidth}px`;
+    }
+  };
+
+  close = () => {
+    if (this.left === 0) {
+      return;
+    }
+
+    this.playReturnAnimation({ to: 0 });
+  };
+
   playRemoveAnimation = () => {
     const { listElement, wrapperElement } = this;
     const { listType } = this.props;

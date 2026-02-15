@@ -8,6 +8,7 @@ import {
   SwipeableListItem,
   SwipeAction,
   TrailingActions,
+  Type as ListType,
 } from '../index';
 
 import {
@@ -738,5 +739,175 @@ describe('SwipeableListItem (type IOS) - behavior', () => {
     setTimeout(() => {
       expect(trailingActionCallback).toHaveBeenCalledTimes(1);
     }, 2000);
+  });
+});
+
+describe('SwipeableListItem - programmatic reveal', () => {
+  test('openLeading() reveals leading actions', () => {
+    const ref = React.createRef();
+
+    render(
+      <SwipeableListItem
+        ref={ref}
+        listType={ListType.IOS}
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+        trailingActions={
+          <TrailingActions>
+            <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+          </TrailingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    const listItem = screen.getByTestId('content');
+    const leadingActions = screen.getByTestId('leading-actions');
+
+    ref.current.openLeading();
+
+    expect(listItem).toHaveClass('swipeable-list-item__content--return');
+    expect(listItem.style.transform).toBe('translateX(123px)');
+    expect(leadingActions.style.width).toBe('123px');
+    expect(leadingActions).toHaveClass('test-actions-opened');
+  });
+
+  test('openTrailing() reveals trailing actions', () => {
+    const ref = React.createRef();
+
+    render(
+      <SwipeableListItem
+        ref={ref}
+        listType={ListType.IOS}
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+        trailingActions={
+          <TrailingActions>
+            <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+          </TrailingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    const listItem = screen.getByTestId('content');
+    const trailingActions = screen.getByTestId('trailing-actions');
+
+    ref.current.openTrailing();
+
+    expect(listItem).toHaveClass('swipeable-list-item__content--return');
+    expect(listItem.style.transform).toBe('translateX(-123px)');
+    expect(trailingActions.style.width).toBe('123px');
+    expect(trailingActions).toHaveClass('test-actions-opened');
+  });
+
+  test('close() returns item to original position', () => {
+    const ref = React.createRef();
+
+    render(
+      <SwipeableListItem
+        ref={ref}
+        listType={ListType.IOS}
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+        trailingActions={
+          <TrailingActions>
+            <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+          </TrailingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    const listItem = screen.getByTestId('content');
+
+    ref.current.openLeading();
+    expect(listItem.style.transform).toBe('translateX(123px)');
+
+    ref.current.close();
+    expect(listItem).toHaveClass('swipeable-list-item__content--return');
+    expect(listItem.style.transform).toBe('translateX(0px)');
+  });
+
+  test('openLeading() is no-op when no leading actions', () => {
+    const ref = React.createRef();
+
+    render(
+      <SwipeableListItem
+        ref={ref}
+        trailingActions={
+          <TrailingActions>
+            <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+          </TrailingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    const listItem = screen.getByTestId('content');
+
+    ref.current.openLeading();
+
+    expect(listItem.style.transform).toBe('');
+  });
+
+  test('openTrailing() is no-op when no trailing actions', () => {
+    const ref = React.createRef();
+
+    render(
+      <SwipeableListItem
+        ref={ref}
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    const listItem = screen.getByTestId('content');
+
+    ref.current.openTrailing();
+
+    expect(listItem.style.transform).toBe('');
+  });
+
+  test('close() is no-op when already closed', () => {
+    const ref = React.createRef();
+
+    render(
+      <SwipeableListItem
+        ref={ref}
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    const listItem = screen.getByTestId('content');
+
+    ref.current.close();
+
+    // Should not add return class since it was already closed
+    expect(listItem).not.toHaveClass('swipeable-list-item__content--return');
   });
 });
