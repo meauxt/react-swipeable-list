@@ -1,14 +1,14 @@
 {
-  "name": "react-swipeable-list",
+  "name": "@meauxt/react-swipeable-list",
   "description": "Swipeable list component for React",
-  "version": "1.10.0",
+  "version": "1.0.0",
   "author": {
-    "name": "Marek Rozmus",
-    "url": "https://github.com/marekrozmus/react-swipeable-list/graphs/contributors"
+    "name": "meauxt",
+    "url": "https://github.com/meauxt"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/marekrozmus/react-swipeable-list"
+    "url": "https://github.com/meauxt/react-swipeable-list"
   },
   "license": "MIT",
   "keywords": [
