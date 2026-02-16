@@ -237,6 +237,13 @@ interface SwipeableListItemProps {
    * Disables mouse events for swiping.
    */
     optOutMouseEvents?: boolean;
+  /**
+   * default: `undefined`
+   *
+   * Programmatically open leading or trailing actions.
+   * Set to `'leading'` or `'trailing'` to reveal actions, or `undefined`/`null` to close.
+   */
+  swipeActionOpen?: 'leading' | 'trailing' | null;
 }
 
 export class SwipeableListItem extends PureComponent<SwipeableListItemProps> {

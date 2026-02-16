@@ -911,3 +911,134 @@ describe('SwipeableListItem - programmatic reveal', () => {
     expect(listItem).not.toHaveClass('swipeable-list-item__content--return');
   });
 });
+
+describe('SwipeableListItem - swipeActionOpen prop', () => {
+  test('swipeActionOpen="leading" opens leading actions', () => {
+    const { rerender } = render(
+      <SwipeableListItem
+        listType={ListType.IOS}
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+        trailingActions={
+          <TrailingActions>
+            <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+          </TrailingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    const listItem = screen.getByTestId('content');
+    const leadingActions = screen.getByTestId('leading-actions');
+
+    rerender(
+      <SwipeableListItem
+        listType={ListType.IOS}
+        swipeActionOpen="leading"
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+        trailingActions={
+          <TrailingActions>
+            <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+          </TrailingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    expect(listItem).toHaveClass('swipeable-list-item__content--return');
+    expect(listItem.style.transform).toBe('translateX(123px)');
+    expect(leadingActions).toHaveClass('test-actions-opened');
+  });
+
+  test('swipeActionOpen="trailing" opens trailing actions', () => {
+    const { rerender } = render(
+      <SwipeableListItem
+        listType={ListType.IOS}
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+        trailingActions={
+          <TrailingActions>
+            <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+          </TrailingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    const listItem = screen.getByTestId('content');
+    const trailingActions = screen.getByTestId('trailing-actions');
+
+    rerender(
+      <SwipeableListItem
+        listType={ListType.IOS}
+        swipeActionOpen="trailing"
+        leadingActions={
+          <LeadingActions>
+            <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+          </LeadingActions>
+        }
+        trailingActions={
+          <TrailingActions>
+            <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+          </TrailingActions>
+        }
+      >
+        <span>Item content</span>
+      </SwipeableListItem>
+    );
+
+    expect(listItem).toHaveClass('swipeable-list-item__content--return');
+    expect(listItem.style.transform).toBe('translateX(-123px)');
+    expect(trailingActions).toHaveClass('test-actions-opened');
+  });
+
+  test('setting swipeActionOpen to null closes actions', () => {
+    const sharedProps = {
+      listType: ListType.IOS,
+      leadingActions: (
+        <LeadingActions>
+          <SwipeAction onClick={jest.fn()}>Leading</SwipeAction>
+        </LeadingActions>
+      ),
+      trailingActions: (
+        <TrailingActions>
+          <SwipeAction onClick={jest.fn()}>Trailing</SwipeAction>
+        </TrailingActions>
+      ),
+      children: <span>Item content</span>,
+    };
+
+    const { rerender } = render(
+      <SwipeableListItem {...sharedProps} />
+    );
+
+    const listItem = screen.getByTestId('content');
+
+    // First open leading via prop
+    rerender(
+      <SwipeableListItem {...sharedProps} swipeActionOpen="leading" />
+    );
+
+    expect(listItem.style.transform).toBe('translateX(123px)');
+
+    // Then close via prop
+    rerender(
+      <SwipeableListItem {...sharedProps} swipeActionOpen={null} />
+    );
+
+    expect(listItem.style.transform).toBe('translateX(0px)');
+  });
+});

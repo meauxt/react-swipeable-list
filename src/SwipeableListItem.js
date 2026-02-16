@@ -150,6 +150,20 @@ class SwipeableListItem extends PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.swipeActionOpen !== this.props.swipeActionOpen) {
+      const { swipeActionOpen } = this.props;
+
+      if (swipeActionOpen === 'leading') {
+        this.openLeading();
+      } else if (swipeActionOpen === 'trailing') {
+        this.openTrailing();
+      } else if (!swipeActionOpen && prevProps.swipeActionOpen) {
+        this.close();
+      }
+    }
+  }
+
   componentWillUnmount() {
     if (this.requestedAnimationFrame) {
       cancelAnimationFrame(this.requestedAnimationFrame);
@@ -950,6 +964,7 @@ SwipeableListItem.propTypes = {
   clickedCallback: PropTypes.func,
   id: PropTypes.string,
   resetState: PropTypes.func,
+  swipeActionOpen: PropTypes.oneOf(['leading', 'trailing']),
 };
 
 export default SwipeableListItem;
